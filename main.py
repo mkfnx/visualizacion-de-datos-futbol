@@ -44,7 +44,8 @@ with st.sidebar:
     home_team_matches = matches[matches['home_team'] == selected_team]
     away_team_matches = matches[matches['away_team'] == selected_team]
     team_matches = pd.concat([home_team_matches, away_team_matches]).sort_values(by='match_date')
-    selected_match_id = st.selectbox('Selecciona un equipo', team_matches, format_func=get_match_label)
+    selected_match_id = st.selectbox('Selecciona un equipo', team_matches, format_func=get_match_label,
+                                     index=len(team_matches) - 1)
 
 match_events = get_match_events(selected_match_id)
 selected_match = team_matches[team_matches['match_id'] == selected_match_id]
@@ -52,8 +53,8 @@ home_team = selected_match['home_team'].iloc[0]
 away_team = selected_match['away_team'].iloc[0]
 
 st.subheader(f'Partido {get_match_label(selected_match_id)} de {selected_competition_name} en {selected_season_name}')
-st.markdown('Selecciona el partido y torneo que deseas ver en el menú lateral. Si el menú está oculto presiona la" \
-"flecha (>) de arriba a la izquierda')
+st.markdown('Selecciona el partido y torneo que deseas ver en el menú lateral. Si el menú está oculto presiona la \
+flecha (>) de arriba a la izquierda')
 
 st.subheader('Disparos a gol')
 st.text('Los más oscuros representan goles')
