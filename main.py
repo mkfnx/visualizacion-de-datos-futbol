@@ -30,8 +30,13 @@ with st.sidebar:
 
     country_competitions = filter_country_competitions(competitions, selected_competition_region)
     unique_competitions = country_competitions['competition_name'].drop_duplicates().sort_values()
-    world_cup_index = np.where(unique_competitions.values == 'FIFA World Cup')[0].item()
-    selected_competition_name = st.selectbox('Selecciona un torneo', unique_competitions, index=world_cup_index)
+    wc = np.where(unique_competitions.values == 'FIFA World Cup')
+    try:
+        default_competition_index = np.where(unique_competitions.values == 'FIFA World Cup')[0].item()
+    except ValueError:
+        default_competition_index = 0
+    selected_competition_name = st.selectbox('Selecciona un torneo', unique_competitions,
+                                             index=default_competition_index)
 
     selected_competitions = filter_competitions_by_name(country_competitions, selected_competition_name)
     selected_season_name = st.selectbox('Selecciona un año o temporada', selected_competitions['season_name'])
@@ -47,6 +52,7 @@ with st.sidebar:
     selected_match_id = st.selectbox('Selecciona un equipo', team_matches, format_func=get_match_label,
                                      index=len(team_matches) - 1)
 
+st.write(f'match id: {selected_match_id}')
 match_events = get_match_events(selected_match_id)
 selected_match = team_matches[team_matches['match_id'] == selected_match_id]
 home_team = selected_match['home_team'].iloc[0]
